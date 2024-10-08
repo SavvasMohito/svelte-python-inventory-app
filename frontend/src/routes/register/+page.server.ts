@@ -1,5 +1,5 @@
 import { fail, redirect, type Actions } from '@sveltejs/kit';
-import type { PageServerLoad } from '../account/$types';
+import type { PageServerLoad } from './$types';
 
 export const load: PageServerLoad = async () => {};
 
@@ -7,9 +7,8 @@ export const actions = {
 	register: async ({ request }) => {
 		// Get form data
 		const formData = await request.formData();
-		const email = formData.get('email');
-		const password = formData.get('password');
-		console.log(email, password);
+		const email = formData.get('email') as string;
+		const password = formData.get('password') as string;
 
 		const res = await fetch('http://backend:8000/api/auth/register', {
 			method: 'POST',
@@ -27,10 +26,10 @@ export const actions = {
 		}
 
 		const errormsg = await res.json();
-		if (errormsg) {
-			if (errormsg.detail && errormsg.detail === 'REGISTER_USER_ALREADY_EXISTS')
+		if (errormsg && errormsg.detail) {
+			if (errormsg.detail === 'REGISTER_USER_ALREADY_EXISTS')
 				return fail(400, { error: 'This email address is already registered' });
-			if (errormsg.detail && errormsg.detail.code === 'REGISTER_INVALID_PASSWORD')
+			if (errormsg.detail.code === 'REGISTER_INVALID_PASSWORD')
 				return fail(400, { error: errormsg.detail.reason });
 		}
 		return fail(400, { error: 'An error occurred' });
