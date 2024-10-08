@@ -7,16 +7,16 @@ export const actions = {
 	login: async ({ request, cookies }) => {
 		// Get form data
 		const formData = await request.formData();
-		const email = formData.get('email') as string;
+		const username = formData.get('username') as string;
 		const password = formData.get('password') as string;
 
-		const res = await fetch('http://backend:8000/api/auth/cookie/login', {
+		const res = await fetch('http://backend:8000/auth/login', {
 			method: 'POST',
 			headers: {
-				'Content-Type': 'application/x-www-form-urlencoded'
+				'Content-Type': 'application/json'
 			},
-			body: new URLSearchParams({
-				username: email,
+			body: JSON.stringify({
+				username: username,
 				password: password
 			})
 		});
@@ -34,13 +34,10 @@ export const actions = {
 			}
 		}
 
-		const errormsg = await res.json();
-
-		if (errormsg && errormsg.detail) {
-			if (errormsg.detail === 'LOGIN_BAD_CREDENTIALS')
-				return fail(400, { error: 'The credentials are incorrect' });
-			if (errormsg.detail === 'LOGIN_USER_NOT_VERIFIED')
-				return fail(400, { error: 'The user has not verified their account' });
+		// API returns error
+		const body = await res.json();
+		if (body && body.detail) {
+			return fail(400, { error: body.detail });
 		}
 		return fail(400, { error: 'An error occurred' });
 	}

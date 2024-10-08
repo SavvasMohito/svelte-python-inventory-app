@@ -19,8 +19,8 @@
 			<form action="?/register" method="POST" use:enhance>
 				<div class="grid gap-4">
 					<div class="grid gap-2">
-						<Label for="email">Email</Label>
-						<Input id="email" name="email" type="email" placeholder="m@example.com" required />
+						<Label for="username">Username</Label>
+						<Input id="username" name="username" type="username" placeholder="johndoe" required />
 					</div>
 					<div class="grid gap-2">
 						<Label for="password">Password</Label>
