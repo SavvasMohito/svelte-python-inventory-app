@@ -1,8 +1,19 @@
 services:
+  frontend:
+    build:
+      dockerfile: .devcontainer/Dockerfile.dev
+    ports:
+      # Exposes application port.
+    - 5100:5173
+    - 4100:4173
+    volumes:
+      # Adds current directory as volume.
+    - ./frontend:/app
+    command: sleep infinity
   backend:
     ports:
       # Exposes application port.
-    - "8000:8000"
+    - 8000:8000
     volumes:
       # Adds current directory as volume.
     - ./backend:/app/src/
