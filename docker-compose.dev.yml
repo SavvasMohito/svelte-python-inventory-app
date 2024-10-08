@@ -1,0 +1,11 @@
+services:
+  backend:
+    ports:
+      # Exposes application port.
+    - "8000:8000"
+    volumes:
+      # Adds current directory as volume.
+    - ./backend:/app/src/
+    environment:
+      # Enables autoreload.
+      BACKEND_RELOAD: "True"
