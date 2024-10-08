@@ -1,6 +1,6 @@
 <script lang="ts">
 	const { data } = $props();
-	const { message }: { message: string } = data;
+	const { message, loggedIn }: { message: string; loggedIn: string } = data;
 </script>
 
 <h1>Welcome to SvelteKit</h1>
@@ -8,3 +8,6 @@
 
 <h2 class="mt-10">Backend message:</h2>
 <p>{message}</p>
+
+<h2 class="mt-10">Protected message:</h2>
+<p>{loggedIn}</p>

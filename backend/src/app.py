@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, FastAPI, HTTPException, Response
+from fastapi import APIRouter, Cookie, Depends, FastAPI, HTTPException, Response
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import UJSONResponse
 from fastapi_login import LoginManager
@@ -61,8 +61,7 @@ def verify_password(plain_password: str, hashed_password: str):
 SECRET = "your-secret-key"
 
 # LoginManager setup
-manager = LoginManager(SECRET, token_url="/login", use_cookie=True)
-manager.cookie_name = "auth_session"  # Name of the cookie to store session data
+manager = LoginManager(SECRET, token_url="/auth/login", use_header=False, use_cookie=True, cookie_name="auth_session")
 
 
 # Pydantic Models for requests
@@ -96,8 +95,10 @@ def health_check() -> None:
 
 
 # Load user by username
-@manager.user_loader
-def load_user(username: str, db: Session = Depends(get_db)):
+def load_user(auth_session: str | None = Cookie(None)):
+    db = SessionLocal()
+    payload = manager._get_payload(auth_session)
+    username = payload.get("sub")
     return db.query(User).filter(User.username == username).first()
 
 
@@ -140,6 +141,6 @@ def logout(response: dict = None):
 app.include_router(auth_router)
 
 
-@app.get("/protected/")
-def protected_route(user=Depends(manager)):
+@app.get("/protected")
+def protected_route(auth_session: str | None = Cookie(None), user=Depends(load_user)):
     return {"message": f"Hello, {user.username}. You are logged in!"}
