@@ -44,7 +44,6 @@ services:
       retries: 40
 
 
-
 volumes:
   backend-db-data:
     name: backend-db-data
