@@ -11,12 +11,15 @@ services:
     - ./frontend:/app
     command: sleep infinity
   backend:
+    build:
+      dockerfile: .devcontainer/Dockerfile.dev
     ports:
       # Exposes application port.
     - 8000:8000
     volumes:
       # Adds current directory as volume.
-    - ./backend:/app/src/
+    - ./backend:/app
+    command: sleep infinity
     environment:
       # Enables autoreload.
       BACKEND_RELOAD: "True"

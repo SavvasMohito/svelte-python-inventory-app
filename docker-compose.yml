@@ -8,23 +8,15 @@ services:
       - 3000:3000
     depends_on:
       - backend
+      
   backend:
     container_name: backend
     build:
       context: ./backend
     restart: always
-    env_file:
-      - ./backend/.env
     depends_on:
       db:
         condition: service_healthy
-    environment:
-      BACKEND_HOST: 0.0.0.0
-      BACKEND_DB_HOST: backend-db
-      BACKEND_DB_PORT: 5432
-      BACKEND_DB_USER: backend
-      BACKEND_DB_PASS: backend
-      BACKEND_DB_BASE: backend
 
   db:
     container_name: db
