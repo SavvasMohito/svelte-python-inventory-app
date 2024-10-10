@@ -1,3 +1,5 @@
+from datetime import timedelta
+
 from fastapi import APIRouter, Cookie, Depends, HTTPException, Response
 from fastapi_login import LoginManager
 from passlib.context import CryptContext
@@ -75,7 +77,7 @@ def login(user: UserLogin, db: Session = Depends(get_db_session), response: Resp
         raise HTTPException(status_code=400, detail="Invalid credentials")
 
     # Create a session token and set it as a cookie
-    access_token = manager.create_access_token(data={"sub": db_user.username})
+    access_token = manager.create_access_token(data={"sub": db_user.username}, expires=timedelta(mins=60))
     manager.set_cookie(response, access_token)
     return {"message": "Login successful"}
 
