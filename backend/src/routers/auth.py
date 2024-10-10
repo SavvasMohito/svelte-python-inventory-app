@@ -18,14 +18,14 @@ class User(Base):
 
 
 # Pydantic Models for requests
-class UserCreate(BaseModel):
+class UserAuth(BaseModel):
     username: str
     password: str
 
 
-class UserLogin(BaseModel):
+class UserRead(BaseModel):
+    id: int
     username: str
-    password: str
 
 
 # Secret key for signing the session tokens
@@ -57,7 +57,7 @@ auth_router = APIRouter(prefix="/auth")
 
 
 @auth_router.post("/register")
-def register(user: UserCreate, db: Session = Depends(get_db_session)):
+def register(user: UserAuth, db: Session = Depends(get_db_session)):
     db_user = db.query(User).filter(User.username == user.username).first()
     if db_user:
         raise HTTPException(status_code=400, detail="Username already registered")
@@ -71,12 +71,17 @@ def register(user: UserCreate, db: Session = Depends(get_db_session)):
 
 
 @auth_router.post("/login")
-def login(user: UserLogin, db: Session = Depends(get_db_session), response: Response = None):
+def login(user: UserAuth, db: Session = Depends(get_db_session), response: Response = None):
     db_user = db.query(User).filter(User.username == user.username).first()
     if not db_user or not verify_password(user.password, db_user.hashed_password):
         raise HTTPException(status_code=400, detail="Invalid credentials")
 
     # Create a session token and set it as a cookie
-    access_token = manager.create_access_token(data={"sub": db_user.username}, expires=timedelta(mins=60))
+    access_token = manager.create_access_token(data={"sub": db_user.username}, expires=timedelta(minutes=30))
     manager.set_cookie(response, access_token)
     return {"message": "Login successful"}
+
+
+@auth_router.get("/session")
+def session(user: UserRead = Depends(load_user)):
+    return UserRead(id=user.id, username=user.username)
