@@ -12,6 +12,10 @@
 	];
 </script>
 
+<svelte:head>
+	<title>Welcome</title>
+</svelte:head>
+
 <Card.Root class="max-w-screen-lg space-y-10">
 	<Card.Header class="flex items-center">
 		<h2 class="text-4xl font-bold">Welcome to the Inventory Manager</h2>

@@ -9,6 +9,10 @@
 	const { form } = $props();
 </script>
 
+<svelte:head>
+	<title>Register</title>
+</svelte:head>
+
 <div class="flex justify-center">
 	<Card.Root class="w-full max-w-sm">
 		<Card.Header>
