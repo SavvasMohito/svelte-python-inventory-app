@@ -40,6 +40,6 @@
 				</Card.Root>
 			{/each}
 		</div>
-		<a href="/login" class={buttonVariants({ size: 'lg' })}> Get Started </a>
+		<a href="/login" class={buttonVariants({ size: 'lg', className: 'text-lg' })}> Get Started </a>
 	</Card.Content>
 </Card.Root>

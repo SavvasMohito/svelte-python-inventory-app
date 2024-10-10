@@ -1,4 +1,5 @@
 <script lang="ts">
+	import Dashboard from '$lib/components/Dashboard.svelte';
 	import Welcome from '$lib/components/Welcome.svelte';
 	import type { User } from '$lib/types.js';
 
@@ -9,10 +10,7 @@
 <div class="flex w-full flex-grow justify-center">
 	<div class="hero-content flex w-full flex-col items-center">
 		{#if user}
-			<h2 class="mt-10">Hello, {user.username}</h2>
-			<form action="/login?/logout" method="post">
-				<button type="submit">Logout</button>
-			</form>
+			<Dashboard {user} />
 		{:else}
 			<Welcome />
 		{/if}
