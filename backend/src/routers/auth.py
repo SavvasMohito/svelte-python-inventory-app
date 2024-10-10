@@ -80,10 +80,3 @@ def login(user: UserLogin, db: Session = Depends(get_db_session), response: Resp
     access_token = manager.create_access_token(data={"sub": db_user.username}, expires=timedelta(mins=60))
     manager.set_cookie(response, access_token)
     return {"message": "Login successful"}
-
-
-@auth_router.post("/logout")
-def logout(response: dict = None):
-    response = response or {"message": "Logged out"}
-    manager.delete_cookie(response)
-    return response

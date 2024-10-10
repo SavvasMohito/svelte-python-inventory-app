@@ -4,6 +4,11 @@ import type { PageServerLoad } from './$types';
 export const load: PageServerLoad = async () => {};
 
 export const actions = {
+	logout: async ({ cookies }) => {
+		cookies.delete('session', { path: '/' });
+		throw redirect(302, '/');
+	},
+
 	login: async ({ request, cookies }) => {
 		// Get form data
 		const formData = await request.formData();
