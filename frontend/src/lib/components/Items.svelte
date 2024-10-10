@@ -5,6 +5,7 @@
 	import type { Item } from '$lib/types';
 	import Trash2 from 'lucide-svelte/icons/trash-2';
 	import EditItemDialog from './EditItemDialog.svelte';
+	import NewItemDialog from './NewItemDialog.svelte';
 
 	// type Props = {
 	// 	items: [];
@@ -17,21 +18,21 @@
 			id: 1,
 			name: 'Screwdriver',
 			description: 'This is a small screwdriver, I left it in the garage.',
-			quantity: 1,
+			quantity: '1',
 			date: '2021-10-01'
 		},
 		{
 			id: 2,
 			name: 'Hammer',
 			description: 'This is the orange hammer I bought from the hardware store across the street.',
-			quantity: 1,
+			quantity: '1',
 			date: '2023-12-01'
 		},
 		{
 			id: 3,
 			name: 'Wrench',
 			description: 'A new wrench my dad game me for my birthday in 2019.',
-			quantity: 1,
+			quantity: '1',
 			date: '2019-05-01'
 		}
 	];
@@ -44,7 +45,7 @@
 	<Card.Header>
 		<div class="flex items-center justify-between">
 			<Card.Title class="text-xl">Your Inventory Items</Card.Title>
-			<Button>+ Add new item</Button>
+			<NewItemDialog />
 		</div>
 		<!-- <Card.Description>Manage your products and view their sales performance.</Card.Description> -->
 	</Card.Header>
