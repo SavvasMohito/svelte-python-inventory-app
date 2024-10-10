@@ -10,13 +10,15 @@
 	import { CalendarDate } from '@internationalized/date';
 	import Settings2 from 'lucide-svelte/icons/settings-2';
 
+	let open = $state(false);
+
 	const { item = $bindable() }: { item: Item } = $props();
 	const date = new Date(item.date);
 	let calendarDate = new CalendarDate(date.getFullYear(), date.getMonth() + 1, date.getDate());
 	let stringDate = $derived(calendarDate.toString());
 </script>
 
-<Dialog.Root>
+<Dialog.Root bind:open>
 	<Dialog.Trigger class={buttonVariants({ variant: 'outline', size: 'icon' })}>
 		<Settings2 class="h-5 w-5" />
 	</Dialog.Trigger>
@@ -27,7 +29,18 @@
 				>Make changes to your item and click save when you're done.</Dialog.Description
 			>
 		</Dialog.Header>
-		<form action="?/updateItem" method="post" class="flex flex-col gap-4" use:enhance>
+		<form
+			action="?/updateItem"
+			method="post"
+			class="flex flex-col gap-4"
+			use:enhance={() => {
+				return async ({ result }) => {
+					if (result.type === 'success') {
+						open = false;
+					}
+				};
+			}}
+		>
 			<Input id="id" type="hidden" name="id" value={item.id} />
 			<div class="grid gap-4 py-4">
 				<div class="grid grid-cols-[80px_1fr] items-center gap-4">

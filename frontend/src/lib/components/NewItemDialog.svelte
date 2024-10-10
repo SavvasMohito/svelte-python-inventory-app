@@ -8,6 +8,8 @@
 	import { Label } from '$lib/components/ui/label/index.js';
 	import { CalendarDate } from '@internationalized/date';
 
+	let open = $state(false);
+
 	const today = new Date();
 	let name = '';
 	let description = '';
@@ -18,7 +20,7 @@
 	let stringDate = $derived(calendarDate.toString());
 </script>
 
-<Dialog.Root>
+<Dialog.Root bind:open>
 	<Dialog.Trigger class={buttonVariants()}>+ Add new item</Dialog.Trigger>
 	<Dialog.Content class="sm:max-w-xl">
 		<Dialog.Header>
@@ -27,7 +29,18 @@
 				Add the details of your item and submit them when you're done.
 			</Dialog.Description>
 		</Dialog.Header>
-		<form action="?/createItem" method="post" class="flex flex-col gap-4" use:enhance>
+		<form
+			action="?/createItem"
+			method="post"
+			class="flex flex-col gap-4"
+			use:enhance={() => {
+				return async ({ result }) => {
+					if (result.type === 'success') {
+						open = false;
+					}
+				};
+			}}
+		>
 			<div class="grid gap-4 py-4">
 				<div class="grid grid-cols-[80px_1fr] items-center gap-4">
 					<Label for="name" class="text-right">Name</Label>
