@@ -1,11 +1,10 @@
 <script lang="ts">
-	import { Button } from '$lib/components/ui/button';
+	import DeleteItemDialog from '$lib/components/DeleteItemDialog.svelte';
+	import EditItemDialog from '$lib/components/EditItemDialog.svelte';
+	import NewItemDialog from '$lib/components/NewItemDialog.svelte';
 	import * as Card from '$lib/components/ui/card';
 	import * as Table from '$lib/components/ui/table';
 	import type { Item } from '$lib/types';
-	import Trash2 from 'lucide-svelte/icons/trash-2';
-	import EditItemDialog from './EditItemDialog.svelte';
-	import NewItemDialog from './NewItemDialog.svelte';
 
 	// type Props = {
 	// 	items: [];
@@ -47,7 +46,6 @@
 			<Card.Title class="text-xl">Your Inventory Items</Card.Title>
 			<NewItemDialog />
 		</div>
-		<!-- <Card.Description>Manage your products and view their sales performance.</Card.Description> -->
 	</Card.Header>
 	<Card.Content>
 		<div class="rounded-md border">
@@ -75,10 +73,7 @@
 							<Table.Cell>
 								<div class="flex gap-2">
 									<EditItemDialog {item} />
-									<Button size="icon">
-										<Trash2 class="h-5 w-5" />
-										<span class="sr-only">Delete</span>
-									</Button>
+									<DeleteItemDialog {item} />
 								</div>
 							</Table.Cell>
 						</Table.Row>
@@ -87,9 +82,9 @@
 			</Table.Root>
 		</div>
 	</Card.Content>
-	<!-- <Card.Footer>
+	<Card.Footer>
 		<div class="text-xs text-muted-foreground">
-			Showing <strong>1-10</strong> of <strong>32</strong> products
+			Showing a total of <strong>{items.length}</strong> items
 		</div>
-	</Card.Footer> -->
+	</Card.Footer>
 </Card.Root>

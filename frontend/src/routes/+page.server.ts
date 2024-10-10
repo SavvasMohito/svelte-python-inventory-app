@@ -16,5 +16,11 @@ export const actions = {
 		// Get form data
 		const formData = await request.formData();
 		console.log('update item', formData);
+	},
+
+	deleteItem: async ({ request }) => {
+		// Get form data
+		const formData = await request.formData();
+		console.log('delete item', formData);
 	}
 } satisfies Actions;
