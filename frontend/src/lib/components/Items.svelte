@@ -2,8 +2,9 @@
 	import { Button } from '$lib/components/ui/button';
 	import * as Card from '$lib/components/ui/card';
 	import * as Table from '$lib/components/ui/table';
-	import Settings2 from 'lucide-svelte/icons/settings-2';
+	import type { Item } from '$lib/types';
 	import Trash2 from 'lucide-svelte/icons/trash-2';
+	import EditItemDialog from './EditItemDialog.svelte';
 
 	// type Props = {
 	// 	items: [];
@@ -11,7 +12,7 @@
 
 	// const { items = $bindable() }: Props = $props();
 
-	const items = [
+	const items: Item[] = [
 		{
 			id: 1,
 			name: 'Screwdriver',
@@ -72,10 +73,7 @@
 							</Table.Cell>
 							<Table.Cell>
 								<div class="flex gap-2">
-									<Button size="icon" variant="outline">
-										<Settings2 class="h-5 w-5" />
-										<span class="sr-only">Edit</span>
-									</Button>
+									<EditItemDialog {item} />
 									<Button size="icon">
 										<Trash2 class="h-5 w-5" />
 										<span class="sr-only">Delete</span>
