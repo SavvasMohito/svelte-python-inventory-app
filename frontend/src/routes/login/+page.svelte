@@ -9,7 +9,7 @@
 	const { form } = $props();
 </script>
 
-<div class="flex flex-grow flex-col items-center justify-center">
+<div class="flex justify-center">
 	<Card.Root class="w-full max-w-sm">
 		<Card.Header>
 			<Card.Title class="text-2xl">Login</Card.Title>
