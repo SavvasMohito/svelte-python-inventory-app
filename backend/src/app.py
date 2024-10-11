@@ -1,13 +1,14 @@
 from contextlib import asynccontextmanager
 
-from fastapi import Depends, FastAPI
+from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import UJSONResponse
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
 from db.base import Base
-from routers.auth import auth_router, load_user
+from routers.auth import auth_router
+from routers.items import items_router
 
 # Database Configuration
 DATABASE_URL = "postgresql://backend:backend@backend-db/backend"
@@ -54,6 +55,7 @@ app.add_middleware(
 
 # Add auth router
 app.include_router(auth_router)
+app.include_router(items_router)
 
 
 @app.get("/health")
@@ -64,8 +66,3 @@ def health_check() -> None:
     It returns 200 if the project is healthy.
     """
     return "hello from the backend!"
-
-
-@app.get("/protected")
-def protected_route(user=Depends(load_user)):
-    return {"message": f"Hello, {user.username}. You are logged in!"}
