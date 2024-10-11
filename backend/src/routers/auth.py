@@ -1,11 +1,12 @@
 from datetime import timedelta
+from typing import Annotated
 
 from fastapi import APIRouter, Cookie, Depends, HTTPException, Response
 from fastapi_login import LoginManager
 from passlib.context import CryptContext
 from pydantic import BaseModel
 from sqlalchemy import Column, Integer, String
-from sqlalchemy.orm import Session
+from sqlalchemy.orm import Session, relationship
 
 from db.base import Base, get_db_session
 
@@ -15,6 +16,7 @@ class User(Base):
     id = Column(Integer, primary_key=True, index=True)
     username = Column(String, unique=True, index=True)
     hashed_password = Column(String)
+    items = relationship("Item", back_populates="user")
 
 
 # Pydantic Models for requests
@@ -46,18 +48,21 @@ def verify_password(plain_password: str, hashed_password: str):
     return pwd_context.verify(plain_password, hashed_password)
 
 
+auth_router = APIRouter(prefix="/auth")
+DBSession = Annotated[Session, Depends(get_db_session)]
+
+
 # Load user by username
-def load_user(auth_session: str | None = Cookie(None), db: Session = Depends(get_db_session)):
+def load_user(db: DBSession, auth_session: str | None = Cookie(None)):
     payload = manager._get_payload(auth_session)
+    if not payload:
+        raise manager.not_authenticated_exception
     username = payload.get("sub")
     return db.query(User).filter(User.username == username).first()
 
 
-auth_router = APIRouter(prefix="/auth")
-
-
 @auth_router.post("/register")
-def register(user: UserAuth, db: Session = Depends(get_db_session)):
+def register(user: UserAuth, db: DBSession):
     db_user = db.query(User).filter(User.username == user.username).first()
     if db_user:
         raise HTTPException(status_code=400, detail="Username already registered")
@@ -71,13 +76,13 @@ def register(user: UserAuth, db: Session = Depends(get_db_session)):
 
 
 @auth_router.post("/login")
-def login(user: UserAuth, db: Session = Depends(get_db_session), response: Response = None):
+def login(user: UserAuth, db: DBSession, response: Response = None):
     db_user = db.query(User).filter(User.username == user.username).first()
     if not db_user or not verify_password(user.password, db_user.hashed_password):
         raise HTTPException(status_code=400, detail="Invalid credentials")
 
     # Create a session token and set it as a cookie
-    access_token = manager.create_access_token(data={"sub": db_user.username}, expires=timedelta(minutes=30))
+    access_token = manager.create_access_token(data={"sub": db_user.username}, expires=timedelta(hours=12))
     manager.set_cookie(response, access_token)
     return {"message": "Login successful"}
 
