@@ -54,7 +54,7 @@ def get_items(user: AuthSession, db: DBSession):
     return items
 
 
-@items_router.post("/items", response_model=ItemRead)
+@items_router.post("/items")
 def create_item(item: ItemCreate, user: AuthSession, db: DBSession):
     try:
         new_item = Item(
@@ -67,7 +67,6 @@ def create_item(item: ItemCreate, user: AuthSession, db: DBSession):
         db.add(new_item)
         db.commit()
         db.refresh(new_item)
-        return new_item
     except Exception as e:
         raise HTTPException(status_code=400, detail=str(e))
 
