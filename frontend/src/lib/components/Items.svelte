@@ -6,35 +6,7 @@
 	import * as Table from '$lib/components/ui/table';
 	import type { Item } from '$lib/types';
 
-	// type Props = {
-	// 	items: [];
-	// };
-
-	// const { items = $bindable() }: Props = $props();
-
-	const items: Item[] = [
-		{
-			id: 1,
-			name: 'Screwdriver',
-			description: 'This is a small screwdriver, I left it in the garage.',
-			quantity: '1',
-			date: '2021-10-01'
-		},
-		{
-			id: 2,
-			name: 'Hammer',
-			description: 'This is the orange hammer I bought from the hardware store across the street.',
-			quantity: '1',
-			date: '2023-12-01'
-		},
-		{
-			id: 3,
-			name: 'Wrench',
-			description: 'A new wrench my dad game me for my birthday in 2019.',
-			quantity: '1',
-			date: '2019-05-01'
-		}
-	];
+	const { items = $bindable() }: { items: Item[] } = $props();
 </script>
 
 <Card.Root
@@ -56,7 +28,7 @@
 						<Table.Head>Description</Table.Head>
 						<Table.Head class="hidden md:table-cell">Quantity</Table.Head>
 						<Table.Head class="hidden md:table-cell">Date</Table.Head>
-						<Table.Head>
+						<Table.Head class="w-1 shrink-0">
 							<span class="sr-only">Actions</span>
 						</Table.Head>
 					</Table.Row>

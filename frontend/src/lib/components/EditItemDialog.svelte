@@ -34,9 +34,10 @@
 			method="post"
 			class="flex flex-col gap-4"
 			use:enhance={() => {
-				return async ({ result }) => {
+				return async ({ result, update }) => {
 					if (result.type === 'success') {
 						open = false;
+						update({ invalidateAll: true });
 					}
 				};
 			}}

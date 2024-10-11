@@ -1,9 +1,9 @@
 <script lang="ts">
 	import { Button } from '$lib/components/ui/button';
-	import type { User } from '$lib/types';
+	import type { Item, User } from '$lib/types';
 	import Items from './Items.svelte';
 
-	const { user = $bindable() }: { user: User } = $props();
+	const { user = $bindable(), items = $bindable() }: { user: User; items: Item[] } = $props();
 </script>
 
 <svelte:head>
@@ -17,5 +17,5 @@
 			<Button type="submit" variant="destructive" class="text-lg">Logout</Button>
 		</form>
 	</div>
-	<Items />
+	<Items {items} />
 </div>

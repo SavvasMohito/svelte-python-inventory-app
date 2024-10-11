@@ -1,14 +1,17 @@
 <script lang="ts">
 	import { enhance } from '$app/forms';
 	import DatePicker from '$lib/components/DatePicker.svelte';
+	import * as Alert from '$lib/components/ui/alert/index.js';
 	import { buttonVariants } from '$lib/components/ui/button';
 	import { Button } from '$lib/components/ui/button/index.js';
 	import * as Dialog from '$lib/components/ui/dialog';
 	import { Input } from '$lib/components/ui/input/index.js';
 	import { Label } from '$lib/components/ui/label/index.js';
 	import { CalendarDate } from '@internationalized/date';
+	import type { ActionData } from '../../routes/$types';
 
 	let open = $state(false);
+	let form: ActionData = $state(null);
 
 	const today = new Date();
 	let name = '';
@@ -34,9 +37,12 @@
 			method="post"
 			class="flex flex-col gap-4"
 			use:enhance={() => {
-				return async ({ result }) => {
+				return async ({ result, update }) => {
 					if (result.type === 'success') {
 						open = false;
+						update({ invalidateAll: true });
+					} else if (result.type === 'failure') {
+						form = { error: result.data?.error };
 					}
 				};
 			}}
@@ -74,6 +80,11 @@
 				</div>
 			</div>
 			<Button class="self-end" type="submit">Add to inventory</Button>
+			{#if form?.error}
+				<Alert.Root variant="destructive" class="text-center font-semibold">
+					<Alert.Description>{form?.error}</Alert.Description>
+				</Alert.Root>
+			{/if}
 		</form>
 	</Dialog.Content>
 </Dialog.Root>

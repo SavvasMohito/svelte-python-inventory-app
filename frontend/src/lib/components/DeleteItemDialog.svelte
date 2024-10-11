@@ -21,7 +21,17 @@
 		</AlertDialog.Header>
 		<AlertDialog.Footer>
 			<AlertDialog.Cancel>Cancel</AlertDialog.Cancel>
-			<form action="?/deleteItem" method="post" use:enhance>
+			<form
+				action="?/deleteItem"
+				method="post"
+				use:enhance={() => {
+					return async ({ result, update }) => {
+						if (result.type === 'success') {
+							update({ invalidateAll: true });
+						}
+					};
+				}}
+			>
 				<input type="hidden" name="id" value={item.id} />
 				<AlertDialog.Action type="submit">Delete</AlertDialog.Action>
 			</form>
