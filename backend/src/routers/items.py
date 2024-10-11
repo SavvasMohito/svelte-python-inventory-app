@@ -79,13 +79,11 @@ def create_item(item: ItemCreate, user: AuthSession, db: DBSession):
 #     return {"message": "Login successful"}
 
 
-# @items_router.delete("/items/{item_id}")
-# def delete_item(user: AuthSession, db: DBSession):
-#     db_user = db.query(User).filter(User.username == user.username).first()
-#     if not db_user or not verify_password(user.password, db_user.hashed_password):
-#         raise HTTPException(status_code=400, detail="Invalid credentials")
-
-#     # Create a session token and set it as a cookie
-#     access_token = manager.create_access_token(data={"sub": db_user.username}, expires=timedelta(hours=12))
-#     manager.set_cookie(response, access_token)
-#     return {"message": "Login successful"}
+@items_router.delete("/items/{item_id}")
+def delete_item(item_id: str, user: AuthSession, db: DBSession):
+    try:
+        item = db.query(Item).filter(Item.id == item_id, Item.uid == user.id).first()
+        db.delete(item)
+        db.commit()
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=str(e))

@@ -22,7 +22,7 @@ async def lifespan_setup(app: FastAPI):
     session_factory = sessionmaker(
         engine,
         expire_on_commit=False,
-        autoflush=False,
+        # autoflush=False,
     )
     app.state.db_engine = engine
     app.state.db_session_factory = session_factory

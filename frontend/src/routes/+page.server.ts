@@ -8,10 +8,7 @@ export const load = (async ({ locals, cookies }) => {
 		const sessionCookie = cookies.get('session');
 		if (sessionCookie) {
 			const res = await fetch('http://backend:8000/items', {
-				headers: {
-					cookie: sessionCookie,
-					'Content-Type': 'application/json'
-				}
+				headers: { cookie: sessionCookie }
 			});
 
 			if (res.ok) {
@@ -64,6 +61,23 @@ export const actions = {
 	deleteItem: async ({ request }) => {
 		// Get form data
 		const formData = await request.formData();
-		console.log('delete item', formData);
+		const id = formData.get('id');
+		const sessionCookie = cookies.get('session');
+		if (sessionCookie) {
+			const res = await fetch(`http://backend:8000/items/${id}`, {
+				method: 'DELETE',
+				headers: { cookie: sessionCookie }
+			});
+
+			if (res.ok) return;
+
+			// API returns error
+			const body = await res.json();
+			if (body && body.detail) {
+				return fail(400, { error: body.detail });
+			}
+			return fail(400, { error: 'An error occurred' });
+		}
+		return redirect(302, '/login');
 	}
 } satisfies Actions;
