@@ -31,9 +31,11 @@
 						<Input id="password" name="password" type="password" />
 					</div>
 					<Button type="submit" class="w-full">Create an account</Button>
-					{#if form?.error}<Alert.Root variant="destructive" class="text-center font-semibold">
+					{#if form?.error}
+						<Alert.Root variant="destructive" class="text-center font-semibold">
 							<Alert.Description>{form?.error}</Alert.Description>
-						</Alert.Root>{/if}
+						</Alert.Root>
+					{/if}
 				</div>
 			</form>
 			<div class="mt-4 text-center text-sm">

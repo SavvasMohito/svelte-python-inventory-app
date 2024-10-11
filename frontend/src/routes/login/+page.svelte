@@ -29,16 +29,15 @@
 					<div class="grid gap-2">
 						<div class="flex items-center">
 							<Label for="password">Password</Label>
-							<!-- <Button formaction="?/forgotPassword" ="ml-auto inline-block text-sm underline">
-								Forgot your password?
-							</Button> -->
 						</div>
 						<Input id="password" name="password" type="password" required />
 					</div>
 					<Button type="submit" class="w-full">Login</Button>
-					{#if form?.error}<Alert.Root variant="destructive" class="text-center font-semibold">
+					{#if form?.error}
+						<Alert.Root variant="destructive" class="text-center font-semibold">
 							<Alert.Description>{form?.error}</Alert.Description>
-						</Alert.Root>{/if}
+						</Alert.Root>
+					{/if}
 				</div>
 			</form>
 			<div class="mt-4 text-center text-sm">
