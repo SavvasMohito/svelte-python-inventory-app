@@ -8,6 +8,8 @@
 	import { Input } from '$lib/components/ui/input/index.js';
 	import { Label } from '$lib/components/ui/label/index.js';
 	import { CalendarDate } from '@internationalized/date';
+	import Plus from 'lucide-svelte/icons/plus';
+
 	import type { ActionData } from '../../routes/$types';
 
 	let form: ActionData = $state(null);
@@ -25,7 +27,8 @@
 </script>
 
 <Dialog.Root bind:open>
-	<Dialog.Trigger class={buttonVariants()}>+ Add new item</Dialog.Trigger>
+	<Dialog.Trigger class={buttonVariants()}><Plus class="mr-1 h-5 w-5" />Add new item</Dialog.Trigger
+	>
 	<Dialog.Content class="sm:max-w-xl">
 		<Dialog.Header>
 			<Dialog.Title>Add new item</Dialog.Title>

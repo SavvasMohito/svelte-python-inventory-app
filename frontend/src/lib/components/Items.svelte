@@ -20,43 +20,51 @@
 		</div>
 	</Card.Header>
 	<Card.Content>
-		<div class="rounded-md border">
-			<Table.Root>
-				<Table.Header>
-					<Table.Row>
-						<Table.Head>Name</Table.Head>
-						<Table.Head>Description</Table.Head>
-						<Table.Head class="hidden md:table-cell">Quantity</Table.Head>
-						<Table.Head class="hidden md:table-cell">Date</Table.Head>
-						<Table.Head class="w-1 shrink-0">
-							<span class="sr-only">Actions</span>
-						</Table.Head>
-					</Table.Row>
-				</Table.Header>
-				<Table.Body>
-					{#each items as item}
-						<Table.Row id={item.id.toString()}>
-							<Table.Cell class="font-medium">{item.name}</Table.Cell>
-							<Table.Cell>{item.description}</Table.Cell>
-							<Table.Cell class="hidden md:table-cell">{item.quantity}</Table.Cell>
-							<Table.Cell class="hidden text-nowrap md:table-cell">
-								{new Date(item.date).toLocaleDateString('en-GB')}
-							</Table.Cell>
-							<Table.Cell>
-								<div class="flex gap-2">
-									<EditItemDialog {item} />
-									<DeleteItemDialog {item} />
-								</div>
-							</Table.Cell>
+		{#if items.length === 0}
+			<div class="text-center text-muted-foreground">
+				You don't have any items in your inventory yet.
+			</div>
+		{:else}
+			<div class="rounded-md border">
+				<Table.Root>
+					<Table.Header>
+						<Table.Row>
+							<Table.Head>Name</Table.Head>
+							<Table.Head>Description</Table.Head>
+							<Table.Head class="hidden md:table-cell">Quantity</Table.Head>
+							<Table.Head class="hidden md:table-cell">Date</Table.Head>
+							<Table.Head class="w-1 shrink-0">
+								<span class="sr-only">Actions</span>
+							</Table.Head>
 						</Table.Row>
-					{/each}
-				</Table.Body>
-			</Table.Root>
-		</div>
+					</Table.Header>
+					<Table.Body>
+						{#each items as item}
+							<Table.Row id={item.id.toString()}>
+								<Table.Cell class="font-medium">{item.name}</Table.Cell>
+								<Table.Cell>{item.description}</Table.Cell>
+								<Table.Cell class="hidden md:table-cell">{item.quantity}</Table.Cell>
+								<Table.Cell class="hidden text-nowrap md:table-cell">
+									{new Date(item.date).toLocaleDateString('en-GB')}
+								</Table.Cell>
+								<Table.Cell>
+									<div class="flex gap-2">
+										<EditItemDialog {item} />
+										<DeleteItemDialog {item} />
+									</div>
+								</Table.Cell>
+							</Table.Row>
+						{/each}
+					</Table.Body>
+				</Table.Root>
+			</div>
+		{/if}
 	</Card.Content>
 	<Card.Footer>
-		<div class="text-xs text-muted-foreground">
-			Showing a total of <strong>{items.length}</strong> items
-		</div>
+		{#if items.length > 0}
+			<div class="text-xs text-muted-foreground">
+				Showing a total of <strong>{items.length}</strong> items
+			</div>
+		{/if}
 	</Card.Footer>
 </Card.Root>

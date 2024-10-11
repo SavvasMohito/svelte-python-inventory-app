@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { buttonVariants } from '$lib/components/ui/button';
 	import * as Card from '$lib/components/ui/card';
+	import { ArrowRight } from 'lucide-svelte';
 
 	const features = [
 		'Add new items to your inventory',
@@ -44,6 +45,8 @@
 				</Card.Root>
 			{/each}
 		</div>
-		<a href="/login" class={buttonVariants({ size: 'lg', className: 'text-lg' })}> Get Started </a>
+		<a href="/login" class={buttonVariants({ size: 'lg', className: 'text-lg' })}>
+			Get Started <ArrowRight class="ml-2 h-5 w-5" />
+		</a>
 	</Card.Content>
 </Card.Root>

@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { Button } from '$lib/components/ui/button';
 	import type { Item, User } from '$lib/types';
+	import Logout from 'lucide-svelte/icons/log-out';
 	import Items from './Items.svelte';
 
 	const { user = $bindable(), items = $bindable() }: { user: User; items: Item[] } = $props();
@@ -14,7 +15,10 @@
 	<div class="flex items-center justify-between">
 		<h2 class="text-4xl font-bold">Welcome back, {user?.username}!</h2>
 		<form action="/login?/logout" method="post">
-			<Button type="submit" variant="destructive" class="text-lg">Logout</Button>
+			<Button type="submit" variant="destructive" class="text-lg">
+				<Logout class="mr-1 h-5 w-5" />
+				Logout
+			</Button>
 		</form>
 	</div>
 	<Items {items} />
