@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { enhance } from '$app/forms';
 	import DatePicker from '$lib/components/DatePicker.svelte';
+	import * as Alert from '$lib/components/ui/alert/index.js';
 	import { buttonVariants } from '$lib/components/ui/button';
 	import { Button } from '$lib/components/ui/button/index.js';
 	import * as Dialog from '$lib/components/ui/dialog';
@@ -9,12 +10,17 @@
 	import type { Item } from '$lib/types';
 	import { CalendarDate } from '@internationalized/date';
 	import Settings2 from 'lucide-svelte/icons/settings-2';
+	import type { ActionData } from '../../routes/$types';
 
+	let form: ActionData = $state(null);
 	let open = $state(false);
+	let loading = $state(false);
 
 	const { item = $bindable() }: { item: Item } = $props();
 	const date = new Date(item.date);
-	let calendarDate = new CalendarDate(date.getFullYear(), date.getMonth() + 1, date.getDate());
+	let calendarDate = $state(
+		new CalendarDate(date.getFullYear(), date.getMonth() + 1, date.getDate())
+	);
 	let stringDate = $derived(calendarDate.toString());
 </script>
 
@@ -34,10 +40,14 @@
 			method="post"
 			class="flex flex-col gap-4"
 			use:enhance={() => {
+				loading = true;
 				return async ({ result, update }) => {
+					loading = false;
 					if (result.type === 'success') {
 						open = false;
 						update({ invalidateAll: true });
+					} else if (result.type === 'failure') {
+						form = { error: result.data?.error };
 					}
 				};
 			}}
@@ -60,11 +70,16 @@
 					<div class="grid grid-cols-[auto_1fr] items-center gap-4">
 						<Label for="date" class="text-right">Date</Label>
 						<Input id="date" type="hidden" name="date" value={stringDate} />
-						<DatePicker value={calendarDate} />
+						<DatePicker bind:value={calendarDate} />
 					</div>
 				</div>
 			</div>
-			<Button class="self-end" type="submit">Save changes</Button>
+			<Button disabled={loading} class="self-end" type="submit">Save changes</Button>
+			{#if form?.error}
+				<Alert.Root variant="destructive" class="text-center font-semibold">
+					<Alert.Description>{form?.error}</Alert.Description>
+				</Alert.Root>
+			{/if}
 		</form>
 	</Dialog.Content>
 </Dialog.Root>

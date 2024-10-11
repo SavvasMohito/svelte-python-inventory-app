@@ -50,7 +50,7 @@ AuthSession = Annotated[UserRead, Depends(load_user)]
 
 @items_router.get("/items", response_model=list[ItemRead])
 def get_items(user: AuthSession, db: DBSession):
-    items = db.query(Item).filter(Item.uid == user.id).all()
+    items = db.query(Item).filter(Item.uid == user.id).order_by(Item.id.desc()).all()
     return items
 
 
@@ -68,22 +68,28 @@ def create_item(item: ItemCreate, user: AuthSession, db: DBSession):
         db.commit()
         db.refresh(new_item)
     except Exception as e:
-        raise HTTPException(status_code=400, detail=str(e))
+        raise HTTPException(status_code=500, detail=str(e))
 
 
-# @items_router.patch("/items/{item_id}")
-# def update_item(item: ItemUpdate, user: AuthSession, db: DBSession):
-#     # Create a session token and set it as a cookie
-#     access_token = manager.create_access_token(data={"sub": db_user.username}, expires=timedelta(hours=12))
-#     manager.set_cookie(response, access_token)
-#     return {"message": "Login successful"}
+@items_router.patch("/items/{item_id}")
+def update_item(item_id: str, item: ItemUpdate, user: AuthSession, db: DBSession):
+    try:
+        exists = db.query(Item).filter(Item.id == item_id, Item.uid == user.id).first()
+        if not exists:
+            raise HTTPException(status_code=404, detail="Item not found")
+        db.query(Item).filter(Item.id == item_id, Item.uid == user.id).update(item.model_dump())
+        db.commit()
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
 
 
 @items_router.delete("/items/{item_id}")
 def delete_item(item_id: str, user: AuthSession, db: DBSession):
     try:
         item = db.query(Item).filter(Item.id == item_id, Item.uid == user.id).first()
+        if not item:
+            raise HTTPException(status_code=404, detail="Item not found")
         db.delete(item)
         db.commit()
     except Exception as e:
-        raise HTTPException(status_code=400, detail=str(e))
+        raise HTTPException(status_code=500, detail=str(e))
