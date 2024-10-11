@@ -10,8 +10,9 @@
 	import { CalendarDate } from '@internationalized/date';
 	import type { ActionData } from '../../routes/$types';
 
-	let open = $state(false);
 	let form: ActionData = $state(null);
+	let open = $state(false);
+	let loading = $state(false);
 
 	const today = new Date();
 	let name = '';
@@ -37,7 +38,9 @@
 			method="post"
 			class="flex flex-col gap-4"
 			use:enhance={() => {
+				loading = true;
 				return async ({ result, update }) => {
+					loading = false;
 					if (result.type === 'success') {
 						open = false;
 						update({ invalidateAll: true });
@@ -79,7 +82,7 @@
 					</div>
 				</div>
 			</div>
-			<Button class="self-end" type="submit">Add to inventory</Button>
+			<Button disabled={loading} class="self-end" type="submit">Add to inventory</Button>
 			{#if form?.error}
 				<Alert.Root variant="destructive" class="text-center font-semibold">
 					<Alert.Description>{form?.error}</Alert.Description>
