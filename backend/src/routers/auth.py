@@ -1,3 +1,4 @@
+import os
 from datetime import timedelta
 from typing import Annotated
 
@@ -31,7 +32,7 @@ class UserRead(BaseModel):
 
 
 # Secret key for signing the session tokens
-SECRET = "your-secret-key"
+SECRET = os.getenv("PASSWORD_SECRET_SALT")
 
 # LoginManager setup
 manager = LoginManager(SECRET, token_url="/auth/login", use_header=False, use_cookie=True, cookie_name="auth_session")
