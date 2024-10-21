@@ -8,6 +8,7 @@ services:
       - 3000:3000
     environment:
       BACKEND_URL: http://backend:8000
+      ORIGIN: http://localhost:3000
     depends_on:
       - backend
       
@@ -20,8 +21,7 @@ services:
       DATABASE_URL: postgresql://dbuser:dbpassword@postgres-db/backend
       PASSWORD_SECRET_SALT: thI5iSaStr0ngS4lt
     depends_on:
-      db:
-        condition: service_healthy
+      - db
 
   db:
     container_name: db
