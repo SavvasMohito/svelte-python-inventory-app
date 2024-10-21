@@ -1,3 +1,4 @@
+import { BACKEND_URL } from '$env/static/private';
 import type { Item } from '$lib/types';
 import { fail, redirect, type Actions } from '@sveltejs/kit';
 import type { PageServerLoad } from './$types';
@@ -7,7 +8,7 @@ export const load = (async ({ locals, cookies }) => {
 	if (locals.user) {
 		const sessionCookie = cookies.get('session');
 		if (sessionCookie) {
-			const res = await fetch('http://backend:8000/items', {
+			const res = await fetch(`${BACKEND_URL}/items`, {
 				headers: { cookie: sessionCookie }
 			});
 
@@ -26,7 +27,7 @@ export const actions = {
 		const formData = await request.formData();
 		const sessionCookie = cookies.get('session');
 		if (sessionCookie) {
-			const res = await fetch('http://backend:8000/items', {
+			const res = await fetch(`${BACKEND_URL}/items`, {
 				method: 'POST',
 				headers: { cookie: sessionCookie, 'Content-Type': 'application/json' },
 				body: JSON.stringify({
@@ -55,7 +56,7 @@ export const actions = {
 		const id = formData.get('id');
 		const sessionCookie = cookies.get('session');
 		if (sessionCookie) {
-			const res = await fetch(`http://backend:8000/items/${id}`, {
+			const res = await fetch(`${BACKEND_URL}/items/${id}`, {
 				method: 'PATCH',
 				headers: { cookie: sessionCookie, 'Content-Type': 'application/json' },
 				body: JSON.stringify({
@@ -84,7 +85,7 @@ export const actions = {
 		const id = formData.get('id');
 		const sessionCookie = cookies.get('session');
 		if (sessionCookie) {
-			const res = await fetch(`http://backend:8000/items/${id}`, {
+			const res = await fetch(`${BACKEND_URL}/items/${id}`, {
 				method: 'DELETE',
 				headers: { cookie: sessionCookie }
 			});

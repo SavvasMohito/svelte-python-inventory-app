@@ -1,3 +1,4 @@
+import { BACKEND_URL } from '$env/static/private';
 import { fail, redirect, type Actions } from '@sveltejs/kit';
 import type { PageServerLoad } from './$types';
 
@@ -15,7 +16,7 @@ export const actions = {
 		const username = formData.get('username') as string;
 		const password = formData.get('password') as string;
 
-		const res = await fetch('http://backend:8000/auth/login', {
+		const res = await fetch(`${BACKEND_URL}/auth/login`, {
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/json'

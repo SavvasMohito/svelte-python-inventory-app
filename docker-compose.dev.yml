@@ -20,6 +20,3 @@ services:
       # Adds current directory as volume.
     - ./backend:/app
     command: sleep infinity
-    environment:
-      # Enables autoreload.
-      BACKEND_RELOAD: "True"

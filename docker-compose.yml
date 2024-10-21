@@ -6,6 +6,8 @@ services:
       context: ./frontend
     ports:
       - 3000:3000
+    environment:
+      BACKEND_URL: http://backend:8000
     depends_on:
       - backend
       
@@ -14,6 +16,8 @@ services:
     build:
       context: ./backend
     restart: always
+    environment:
+      DATABASE_URL: postgresql://dbuser:dbpassword@postgres-db/backend
     depends_on:
       db:
         condition: service_healthy
@@ -21,19 +25,14 @@ services:
   db:
     container_name: db
     image: postgres:16.3-bullseye
-    hostname: backend-db
+    hostname: postgres-db
     environment:
-      POSTGRES_PASSWORD: "backend"
-      POSTGRES_USER: "backend"
-      POSTGRES_DB: "backend"
+      POSTGRES_USER: dbuser
+      POSTGRES_PASSWORD: dbpassword
+      POSTGRES_DB: backend
     volumes:
       - backend-db-data:/var/lib/postgresql/data
     restart: always
-    healthcheck:
-      test: pg_isready -U backend
-      interval: 2s
-      timeout: 3s
-      retries: 40
 
 
 volumes:

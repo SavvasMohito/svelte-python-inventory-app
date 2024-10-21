@@ -1,3 +1,4 @@
+import os
 from contextlib import asynccontextmanager
 
 from fastapi import FastAPI
@@ -11,7 +12,7 @@ from routers.auth import auth_router
 from routers.items import items_router
 
 # Database Configuration
-DATABASE_URL = "postgresql://backend:backend@backend-db/backend"
+DATABASE_URL = os.getenv("DATABASE_URL")
 
 
 @asynccontextmanager

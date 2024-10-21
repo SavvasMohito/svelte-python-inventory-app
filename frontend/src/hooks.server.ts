@@ -1,9 +1,10 @@
+import { BACKEND_URL } from '$env/static/private';
 import type { Handle } from '@sveltejs/kit';
 
 export const handle: Handle = async ({ event, resolve }) => {
 	const sessionCookie = event.cookies.get('session');
 	if (sessionCookie) {
-		const res = await fetch('http://backend:8000/auth/session', {
+		const res = await fetch(`${BACKEND_URL}/auth/session`, {
 			headers: { cookie: sessionCookie }
 		});
 		if (res.ok) {
