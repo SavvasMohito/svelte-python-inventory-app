@@ -3,8 +3,8 @@
 {
   "name": "frontend dev",
   "dockerComposeFile": [
-      "../../../docker-compose.yml",
-      "../../../docker-compose.dev.yml"
+      "../../docker-compose.yml",
+      "../../docker-compose.dev.yml"
   ],
   "service": "frontend",
   "workspaceFolder": "/app"
