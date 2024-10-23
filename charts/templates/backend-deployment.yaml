@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app: backend
+  template:
+    metadata:
+      labels:
+        app: backend
+    spec:
+      containers:
+      - name: backend
+        image: {{ .Values.backend.image.repository }}:{{ .Values.backend.image.tag }}
+        ports:
+        - containerPort: {{ .Values.backend.service.port }}
+        env:
+        - name: DATABASE_URL
+          valueFrom:
+            secretKeyRef:
+              name: backend-secrets
+              key: DATABASE_URL
+        - name: PASSWORD_SECRET_SALT
+          valueFrom:
+            secretKeyRef:
+              name: backend-secrets
+              key: PASSWORD_SECRET_SALT
+      initContainers:
+      - name: check-db-ready
+        image: {{ .Values.postgres.image.repository }}:{{ .Values.postgres.image.tag }}
+        command: ['sh', '-c', 
+          'until pg_isready -h postgres-db; 
+          do echo waiting for database; sleep 2; done;']
