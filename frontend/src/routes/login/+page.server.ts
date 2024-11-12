@@ -6,7 +6,7 @@ export const load: PageServerLoad = async () => {};
 
 export const actions = {
 	logout: async ({ cookies }) => {
-		cookies.delete('session', { path: '/' });
+		cookies.delete('session', { path: '/', httpOnly: true, secure: false, sameSite: 'lax' });
 		throw redirect(302, '/');
 	},
 
