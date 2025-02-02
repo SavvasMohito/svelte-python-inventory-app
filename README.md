@@ -11,6 +11,8 @@ The code is distributed in two main directories, each with its own README explai
 2. [/backend](./backend): Contains all of the backend code dependencies and README
 3. [/charts](./charts): Includes the helm charts for deploying the project on Kubernetes
 
-This application was developed by following the microservices architecture, meaning each component gets deployed separately as a docker container. The configuration of each one can be viewed in the [docker-compose.yml](./docker-compose.yml) file.
+This application was developed following the microservices architecture, meaning each component gets deployed separately as a docker container. The configuration of each one can be viewed in the [docker-compose.yml](./docker-compose.yml) file.
 
-To run the project locally using docker, clone the repository and run `docker compose up -d --build` from the root directory. Everything should be automatically installed and launched. The only requirement is for the .env file to be created and populated, as shown in the .env.example template file.
+## Running the app
+
+To run the project locally using docker, clone the repository and run `docker compose up -d --build` from the root directory. Everything should be automatically installed and launched. Access `localhost:3000` on the host machine to view the web app.
